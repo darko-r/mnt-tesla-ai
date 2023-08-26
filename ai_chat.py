@@ -59,6 +59,7 @@ vectorstore = Chroma(persist_directory=os.path.join(".", "docs", "merged_vectors
 # print(qa_chain({"query": question}))
 # ----------------------------------------------------------------
 
+
 # ConversationalRetrievalChain example
 # ----------------------------------------------------------------
 memory = ConversationBufferMemory(memory_key = "chat_history", return_messages = True)
