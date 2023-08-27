@@ -1,0 +1,9 @@
+name date source length
+A New System of Alternate Current Motors and Transformers by Nikola Tesla1888-05-16	Archives of the Nikola Tesla Museum	11
+Experiments with Alternating Currents of Very High Frequency, and Their Application to Methods of Artificial Illumination by Nikola Tesla1891-05-20	Archives of the Nikola Tesla Museum	27
+Experiments with Alternate Currents of High Potential and High Frequency by Nikola Tesla1892-02-01	Archives of the Nikola Tesla Museum	64
+On Light and Other High Frequency Phenomena1893-02-24	Archives of the Nikola Tesla Museum	50
+On Mechanical and Electrical Oscillators1893-08-25	Archives of the Nikola Tesla Museum	5
+On Electricity1897-01-27	Archives of the Nikola Tesla Museum	8
+Lecture before the New York Academy of Science1897-04-06	Archives of the Nikola Tesla Museum	20
+High Frequency Oscillators for Electro-Therapeutic and Other Purposes1898-11-17	Archives of the Nikola Tesla Museum	11
