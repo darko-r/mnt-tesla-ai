@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 from openai import OpenAI
+import re
 
 st.title("Simple chat")
 client = OpenAI()
@@ -72,7 +73,7 @@ if prompt := st.chat_input("What is up?"):
         
         messages = client.beta.threads.messages.list(thread_id=thread.id)
         last_msg = max(messages.data, key = lambda x: x.created_at)
-        response = last_msg.content[0].text.value
+        response = re.sub('【.*】', '', last_msg.content[0].text.value)
         if response != "I'm sorry, I don't know the answer.":
             print(f"response found with assistant {assistant}")
             with st.chat_message("assistant"):

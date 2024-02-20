@@ -1,0 +1,8 @@
+{
+  "error": {
+    "message": "You must provide the 'OpenAI-Beta' header to access the Assistants API. Please try again by setting the header 'OpenAI-Beta: assistants=v1'.",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": "invalid_beta"
+  }
+}
