@@ -5,6 +5,7 @@ import re
 
 st.title("Simple chat")
 client = OpenAI()
+metadata_assistant = 'asst_W6n8gUPfbDE93aeShi0UA1MC'
 assistants = ['asst_X5VLaEo73bi3fuH7DcrZnMF0',
 'asst_KH8fvndG7mfHmkcGw4mgzY0P',
 'asst_X0iM9rr8BcIaDCjQWGLLqTYk',
@@ -53,30 +54,55 @@ if prompt := st.chat_input("What is up?"):
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    for assistant in assistants:
-        print(f"trying assistant {assistant}")
-        run = client.beta.threads.runs.create(
-            thread_id = thread.id,
-            assistant_id = assistant
-        )
+    assistant = metadata_assistant
+    run = client.beta.threads.runs.create(
+        thread_id = thread.id,
+        assistant_id = assistant
+    )
+    run = client.beta.threads.runs.retrieve(
+        thread_id=thread.id,
+        run_id=run.id
+    )
+
+    while run.status != "completed":
         run = client.beta.threads.runs.retrieve(
             thread_id=thread.id,
             run_id=run.id
         )
+        time.sleep(1)
+    
+    messages = client.beta.threads.messages.list(thread_id=thread.id)
+    last_msg = max(messages.data, key = lambda x: x.created_at)
+    response = re.sub('【.*】', '', last_msg.content[0].text.value)
+    if response != "I'm sorry, I don't know the answer.":
+        print(f"response found with assistant {assistant}")
+        with st.chat_message("assistant"):
+            st.markdown(response)
+        st.session_state.messages.append({"role": "assistant", "content": response})
+    # for assistant in assistants:
+    #     print(f"trying assistant {assistant}")
+    #     run = client.beta.threads.runs.create(
+    #         thread_id = thread.id,
+    #         assistant_id = assistant
+    #     )
+    #     run = client.beta.threads.runs.retrieve(
+    #         thread_id=thread.id,
+    #         run_id=run.id
+    #     )
 
-        while run.status != "completed":
-            run = client.beta.threads.runs.retrieve(
-                thread_id=thread.id,
-                run_id=run.id
-            )
-            time.sleep(1)
+    #     while run.status != "completed":
+    #         run = client.beta.threads.runs.retrieve(
+    #             thread_id=thread.id,
+    #             run_id=run.id
+    #         )
+    #         time.sleep(1)
         
-        messages = client.beta.threads.messages.list(thread_id=thread.id)
-        last_msg = max(messages.data, key = lambda x: x.created_at)
-        response = re.sub('【.*】', '', last_msg.content[0].text.value)
-        if response != "I'm sorry, I don't know the answer.":
-            print(f"response found with assistant {assistant}")
-            with st.chat_message("assistant"):
-                st.markdown(response)
-            st.session_state.messages.append({"role": "assistant", "content": response})
-            break
+    #     messages = client.beta.threads.messages.list(thread_id=thread.id)
+    #     last_msg = max(messages.data, key = lambda x: x.created_at)
+    #     response = re.sub('【.*】', '', last_msg.content[0].text.value)
+    #     if response != "I'm sorry, I don't know the answer.":
+    #         print(f"response found with assistant {assistant}")
+    #         with st.chat_message("assistant"):
+    #             st.markdown(response)
+    #         st.session_state.messages.append({"role": "assistant", "content": response})
+    #         break
