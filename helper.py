@@ -8,6 +8,19 @@ import re
 import datetime
 import dateparser
 
+"""
+TODO
+    done - copy all from langchian here
+    done - integrade cond_parser 
+    done - integrate classifier
+    - write final_ret
+    - write get_file_name
+    - search branch
+    - LangChain tidy-up
+    - parse and print citation
+    - multiple count()
+"""
+
 metadata_assistant = 'asst_W6n8gUPfbDE93aeShi0UA1MC'
 
 condition_parse_prompt = """
@@ -28,7 +41,7 @@ Examples:
 	- "How many lectures did Nikola Tesla write between 1895 and 1905?" -> "COUNT("type"=="lecture" AND "date">"1895" AND "date"<"1905")"
 	- "can you give me the list of articles, patents and lectures of Nikola Tesla"  -> "("type"=="lecture" OR "type"=="article" OR "type"=="patent")"
 	
-Prompt: {prompt}
+Prompt: {0}
 """
 
 classifier_prompt = """
@@ -72,6 +85,9 @@ prior = {
     ">=": 0
 }
 
+def strip1(s: str) -> str:
+    return s.strip().strip('"').strip('\'').strip(')').strip('(').strip('"').strip('\'')
+
 def get_ops(string):
     search_chars = ['AND', 'OR', '>', '<', '==', '!=']
 
@@ -89,8 +105,7 @@ def get_elements(string):
     elements_ = re.split('AND|OR|>|<|==|!=', string)
     indexes = []
     
-    for e in elements_:
-        e = e.strip().strip('"').strip('\'')
+    for e in [strip1(e) for e in elements_]:
         index = string.find(e)
         while index != -1:
             if {e: index} not in indexes:
@@ -132,7 +147,6 @@ class json_entry():
 
             Conditions are expected to be in form: "key1"=="value1" AND "key1">"value2 OR "key3"!="value3""
         """
-        print(f"------starting {self.dict_['title']}")
         operations = get_ops(condition)
         elements = get_elements(condition)
         l = sorted(operations + elements, key=lambda e: list(e.values())[0])
@@ -160,9 +174,9 @@ class json_entry():
                     break
         return l[0]
     
+    # TODO (JAKSA) tidy up pls
     def fun(self, value1, op, value2) -> bool:
-        if isinstance(value1, bool):
-            print(f"executing1 {value1} {op} {value2}")
+        if isinstance(value1, bool) and isinstance(value2, bool):
             return ops[op](value1, value2)
         bools = False
         if value1 == "True":
@@ -179,7 +193,6 @@ class json_entry():
             value2 = False
         
         if bools:
-            print(f"executing2 {value1} {op} {value2}")
             return ops[op](value1, value2)
         if value1 in valid_fields:
             key = value1
@@ -196,7 +209,6 @@ class json_entry():
             dict_value = self.dict_[key]
         if not dict_value:
             return False
-        print(f"executing3 {dict_value} {op} {value}")
         return ops[op](dict_value, value)
 
 
@@ -220,7 +232,7 @@ def classify(prompt: str) -> str:
             {"role": "user", "content": classifier_prompt.format(prompt)}
         ]
     )
-    return completion.choices[0].message
+    return strip1(completion.choices[0].message.content)
 
 def parse_condition(prompt: str) -> str:
     completion = client.chat.completions.create(
@@ -230,4 +242,4 @@ def parse_condition(prompt: str) -> str:
             {"role": "user", "content": condition_parse_prompt.format(prompt)}
         ]
     )
-    return completion.choices[0].message
+    return strip1(completion.choices[0].message.content)
