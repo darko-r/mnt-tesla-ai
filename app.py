@@ -22,7 +22,6 @@ def load_json_entry_list(path):
 def load_asst_summary(path):
     return json.load(open(path))
 
-# file_assistants = load_assistants()
 json_entry_list_ = load_json_entry_list('metadata.json')
 asst_summary = load_asst_summary('assistant_summary.json')
 
@@ -47,6 +46,7 @@ if prompt:
     with st.chat_message("user"):
         st.markdown(prompt)
     class_ = classify(prompt)
+    # class_ = "search"
     print(f"Classified: {prompt} as class: {class_}")
     if class_.lower() == "logic":
         conditions = parse_condition(prompt)
@@ -68,28 +68,33 @@ if prompt:
         else:
             response = "Was not able to find the file specified :("
     else:
-        response = "Search output not available :("
-        # # assistant = metadata_assistant
-        # assistant = file_assistants[0]
-        # run = client.beta.threads.runs.create(
-        #     thread_id = user_thread.id,
-        #     assistant_id = assistant
-        # )
-        # run = client.beta.threads.runs.retrieve(
-        #     thread_id=user_thread.id,
-        #     run_id=run.id
-        # )
+        file_assistants = load_assistants()
+        for assistant in (a.id for a in file_assistants):
+            print(f"Starting search for assistant {assistant}")
+            run = client.beta.threads.runs.create(
+                thread_id = user_thread.id,
+                assistant_id = assistant.id
+            )
+            run = client.beta.threads.runs.retrieve(
+                thread_id=user_thread.id,
+                run_id=run.id
+            )
 
-        # while run.status != "completed":
-        #     run = client.beta.threads.runs.retrieve(
-        #         thread_id=user_thread.id,
-        #         run_id=run.id
-        #     )
-        #     time.sleep(1)
-        
-        # messages = client.beta.threads.messages.list(thread_id=user_thread.id)
-        # last_msg = max(messages.data, key = lambda x: x.created_at)
-        # response = re.sub('【.*】', '', last_msg.content[0].text.value)
+            while run.status != "completed":
+                run = client.beta.threads.runs.retrieve(
+                    thread_id=user_thread.id,
+                    run_id=run.id
+                )
+                time.sleep(1)
+            
+            messages = client.beta.threads.messages.list(thread_id=user_thread.id)
+            last_msg = max(messages.data, key = lambda x: x.created_at)
+            assistant_response = re.sub('【.*】', '', last_msg.content[0].text.value)
+            if assistant_response != "I'm sorry, I don't know the answer.":
+                print(f"Found response with assistant {assistant}")
+                response = assistant_response
+                break
+    
     if response != "I'm sorry, I don't know the answer.":
         with st.chat_message("assistant"):
             st.markdown(response)

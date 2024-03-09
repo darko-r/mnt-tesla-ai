@@ -14,17 +14,19 @@ TODO
     done - integrade cond_parser 
     done - integrate classifier
     - write final_ret
-    - write get_file_name
+    done - write get_file_name
     - search branch
     - LangChain tidy-up
     - parse and print citation
-    - multiple count()
+    - chrono sort output
+    - count output
+    - multiple count
 """
 
 metadata_assistant = 'asst_W6n8gUPfbDE93aeShi0UA1MC'
 
 condition_parse_prompt = """
-Taking into account the possible keys and their possible values, definitions of allowed output functions and the following example convert text prompt to condition string. Respond only with the conditions string, nothing else. Disregard all parts of the string that are not the following 5 types:
+Taking into account the possible keys and their possible values, definitions of allowed output functions and the following example convert text prompt to condition string. Respond only with the conditions string, nothing else. Disregard all parts of the string that are not the following 5 types. Disregard requests for chronological sorting, consider date only if it is needed for file listing:
 
 Keys and values:
 	- id: int
