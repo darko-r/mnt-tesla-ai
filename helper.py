@@ -13,14 +13,15 @@ TODO
     done - copy all from langchian here
     done - integrade cond_parser 
     done - integrate classifier
-    - write final_ret
     done - write get_file_name
+    - try/catch around response generation
     - search branch
     - LangChain tidy-up
     - parse and print citation
     - chrono sort output
     - count output
     - multiple count
+    - history?
 """
 
 metadata_assistant = 'asst_W6n8gUPfbDE93aeShi0UA1MC'

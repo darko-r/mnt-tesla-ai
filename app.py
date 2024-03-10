@@ -73,7 +73,7 @@ if prompt:
             print(f"Starting search for assistant {assistant}")
             run = client.beta.threads.runs.create(
                 thread_id = user_thread.id,
-                assistant_id = assistant.id
+                assistant_id = assistant
             )
             run = client.beta.threads.runs.retrieve(
                 thread_id=user_thread.id,

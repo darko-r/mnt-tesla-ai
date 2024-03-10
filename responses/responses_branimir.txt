@@ -1,0 +1,96 @@
+- Query: What did Nikola Tesla think about Mars?
+ 1   - Response: I don't know.
+ 3   - Response: Nikola Tesla believed that Mars may be inhabited and conducted experiments to try to ascertain if this was true.
+  9  - Response: Nikola Tesla believed that there was a possibility of intelligent life on Mars and that it could potentially communicate with Earth.
+ 1   - Response: I don't know.
+ 3   - Response: Nikola Tesla believed that Mars may be inhabited and conducted experiments to try to ascertain if this was true.
+ 4   - Response: Nikola Tesla believed that Mars was inhabited and that he had received a message from Mars.
+  5  - Response: Nikola Tesla believed that Mars was inhabited by highly developed intelligent beings and that they were capable of signaling to Earth. He also believed that his electrical experiments provided evidence of electrical disturbances emanating from Mars.
+  2  - Response: Nikola Tesla was interested in finding out if Mars is inhabited.
+  1  - Response: There is no information provided in the given context about Nikola Tesla's thoughts on Mars.
+  1  - ERROR
+  4  - Response: Nikola Tesla believed that Mars was inhabited by highly developed intelligent beings and that he had received a message from Mars.
+  4  - Response: Nikola Tesla believed that Mars was inhabited by highly developed intelligent beings and that he had received a message from Mars.
+  10  - Response: Nikola Tesla believed that Mars may be inhabited by highly developed intelligent beings and that the strange electrical disturbances he discovered were emanating from Mars.
+   4 - Response: Nikola Tesla believed that Mars was inhabited by intelligent beings and that he had received electrical signals from Mars.
+   4 - Response: Nikola Tesla believed that Mars was inhabited by highly developed intelligent beings and that he had received strange electrical disturbances from the planet.
+
+Objašnjenje: Odgovori gde Tesla kaže da ‘’Mars may be inhabited’’ su bolje rangirani od ‘’Mars was inhabited’’ jer se Tesla o spekulativnim temama  opreznije izjašnjavao. Najlošije sam rangirao ‘’I dont know’’ ili ‘’There is no information…’’ Sa br 10 je rangiran odgovor koji daje nešto malo više podataka od onog sa br 9
+
+- Query: How many patents did Nikola Tesla file between 1890. and 1895.?
+  1  - Response: I don't know.
+   6 - Response: Nikola Tesla filed a total of 14 patents between 1890 and 1895.
+   3 - Response: Nikola Tesla filed a total of 8 patents between 1890 and 1895.
+   10 - Response: Nikola Tesla filed a total of 25 patents between 1890 and 1895.
+   1 - ERROR
+   3 - Response: Nikola Tesla filed a total of 9 patents between 1890 and 1895.
+ 1   - Response: Based on the given context, it is not possible to determine the exact number of patents Nikola Tesla filed between 1890 and 1895.
+   2 - Response: Nikola Tesla filed at least 4 patents between 1890 and 1895.
+  10  - Response: Nikola Tesla filed a total of 25 patents between 1890 and 1895.
+ 1   - ERROR
+  1  - Response: The given context does not provide any information about the number of patents Nikola Tesla filed between 1890 and 1895.
+  1  - Response: Based on the given context, it is not possible to determine the exact number of patents Nikola Tesla filed between 1890 and 1895.
+   1 - Response: I don't know the answer to the question.
+10    - Response: Nikola Tesla filed a total of 25 patents between 1890 and 1895.
+  1  - ERROR
+
+Objašnjenje: ovde se nisam previše trudio da rangiram sve odgovore s obzirom da se radi samo o tačnom broju!
+
+
+
+- Query: How did Nikola Tesla envision the future of travel?
+   2 - Response: Nikola Tesla envisioned the future of travel to be powered by motive power.
+   3 - Response: Nikola Tesla envisioned that airplanes would rise to great heights and travel at incredible speeds.
+   2 - Response: Nikola Tesla envisioned the future of travel to be powered by motive power.
+ 1   - Response: I don't know.
+  3  - Response: Nikola Tesla envisioned that airplanes would rise to great heights and travel at incredible speeds.
+ 5   - Response: Nikola Tesla envisioned the future of travel to involve the use of dirigibles, or airships, of the Zeppelin type. He believed that these airships would be propelled more rapidly than airplanes and would be safer. He also believed that wireless transmission of power would revolutionize aircraft, allowing them to be powered without the need for carrying fuel. Tesla saw the potential for airships and airplanes to travel great distances economically and without limitations on their radius of action.
+ 7   - Response: Nikola Tesla envisioned a future of travel that included advancements in aerial and sea navigation, wireless telegraphy, and wireless transmission of power. He believed that wireless telegraphy and telephony would make astounding strides, with the possibility of wireless transmission across the Pacific and trans-Atlantic wireless telephony. He also believed that the use of wireless telephones in isolated districts would spread rapidly. In terms of aerial navigation, Tesla believed that aeroplanes would not be able to soar and that dirigible balloons would be a safer and faster mode of transportation. He also believed that improvements would be made in ship propulsion, with the introduction of a new principle that would replace the propeller. Additionally, Tesla believed in the future adoption of electricity for the propulsion of automobiles, trains, and ocean liners, eliminating the need for carrying fuel and allowing for greater speed and economy.
+ 8   - Response: Nikola Tesla envisioned the future of travel to involve the use of dirigibles, specifically of the Zeppelin type, as a common vehicle for travel. He believed that dirigibles could be propelled more rapidly than airplanes and would be safer overall. Tesla also believed that the use of wireless transmission of power would revolutionize aircraft, allowing for the transmission of power to them through the air. This would eliminate the need for carrying fuel on airplanes or airships and would provide virtually unlimited power supply. Tesla also saw potential for the application of electricity in automobiles, railways, and ocean liners, which would result in greater speed and economy in transportation.
+  9  - Response: Nikola Tesla envisioned that aerial and sea navigation would make astounding strides in the future. He believed that wireless telegraphy and telephony would advance significantly, allowing for wireless transmission across the Pacific and trans-Atlantic wireless telephony. He also predicted that the use of wireless telephones in isolated districts would spread rapidly. Additionally, Tesla believed that there would be a revolution in ideas regarding radio-activity and that progress in aerial navigation would be made, with a focus on dirigible balloons rather than heavy aeroplanes.
+  1  - ERROR
+  6  - Response: Nikola Tesla envisioned the future of travel to involve the use of dirigibles, or airships, as a common mode of transportation. He believed that dirigibles could be propelled more rapidly than airplanes and would be safer. He also believed that the use of wireless power transmission would revolutionize aircraft, allowing them to receive power through the air.
+ 10   - Response: Nikola Tesla envisioned the future of travel to include advancements in wireless telegraphy and telephony, as well as the use of dirigibles (airships) for travel. He believed that wireless transmission of power would revolutionize aircraft and enable them to travel at high speeds and great heights. He also predicted the possibility of a three-hour aeroplane trip from New York to London.
+   6 - Response: Nikola Tesla envisioned the future of travel to involve the use of dirigibles, specifically of the Zeppelin type. He believed that these airships would be propelled more rapidly than airplanes and would be safer. Tesla also mentioned the need for sufficient power to overcome obstacles such as storms, and he believed that docking and housing methods would need to be devised to reduce the danger of landing.
+   8 - Response: Nikola Tesla envisioned the future of travel to involve high-speed airplanes that could fly at great heights, such as eight miles above the earth's surface. He believed that people would be able to travel from New York to London in just three hours using these airplanes.
+  6  - Response: Nikola Tesla envisioned the future of travel to include the use of dirigibles, or airships, as a common vehicle for travel. He believed that dirigibles would be safer and faster than airplanes, and would provide more comfort for passengers. He also mentioned the need to overcome obstacles such as storms and lightning. Additionally, Tesla believed in the possibility of transmitting power through the air, which he believed would revolutionize aircraft.
+
+Objašnjenje: Najbolji bi bio onaj odgovor koji je dobio ocenu 7 samo da nema jednu netačnu rečenicu (označeno žuto). Najdetaljniji je i sve ostalo je objašnjeno dobro. Ne znam odakle mu da avioni neće moći da uzlete - činjenica je da je Tesla par godina pre nego što su braća Rajt poletela on to predvideo kao sigurnu stvar u bliskoj budućnosti…Sa 10 sam ocenio odgovor koji nema netačnosti ali je relativno kratak.
+Ima jedna stvar o kojoj treba da razmisliš. Tesla je komentarisao aktuelne dogadjaje u nauci u velikom rasponu 30 možda 40 godina. Početkom 20. veka cepelini su imali veliku perspektivu pa ih je tesla ocenjivao sa više optimizma, pitanje je da li AI može da odgovori tako da ima u vidu da su se Teslini odgovori ponekad menjali tokom vremena?
+
+
+- Query: What is Tesla's description of the human eye?
+  1  - Response: I'm sorry, but based on the given context, there is no information provided about Tesla's description of the human eye.
+  1  - Response: Mr. Tesla's description of the human eye is not provided in the given context.
+   1 - Response: I'm sorry, but the given context does not provide any information about Tesla's description of the human eye.
+   1 - Response: Tesla's description of the human eye is not provided in the given context.
+   1 - Response: I don't know.
+   10 - Response: Tesla describes the human eye as an organ that is directly affected by a subtle medium that fills all space and is the most sensitive of all organs, more sensitive to external impressions than any other.
+   8 - Response: Tesla describes the human eye as the most sensitive of our organs and the only organ directly affected by the subtle medium that fills all space.
+    8 - Response: Tesla describes the human eye as the most sensitive of our organs, being incomparably more sensitive to external impressions than any other.
+ 1   - Response: Tesla's description of the human eye is not provided in the given context.
+   8 - Response: Tesla describes the human eye as the most sensitive of our organs, incomparably more sensitive to external impressions than any other.
+  9  - Response: Tesla describes the human eye as a sense organ that receives impressions from the outer world and allows the individual to perceive and discern different influences.
+  2  - Response: Tesla describes the human eye as a self-propelling machine that receives impressions through the eye and governs the motions of the human organism.
+   7 - Response: Tesla describes the human eye as an organ that receives external impressions and conveys them to the mind through visual nerves.
+  1  - Response: Tesla's description of the human eye is not provided in the given context.
+   2 - Response: Tesla describes the human eye as a self-propelling machine that receives impressions through the eye and governs the motions of the body.
+
+- Query: Where was Nikola Tesla born?
+   9 - Response: Nikola Tesla was born in Smiljan, Lika, which was a border country of Austria-Hungary.
+   9 - Response: Nikola Tesla was born in Smiljan, Lika, which was the border country of Austria-Hungary.
+   9 - Response: Nikola Tesla was born in Smiljan, Lika, the border country of Austria-Hungary.
+   7 - Response: Nikola Tesla was born in Smiljan, which is now modern-day Croatia.
+ 9   - Response: Nikola Tesla was born in Smiljan, Lika, the border country of Austria-Hungary.
+   6 - Response: Nikola Tesla was born in Smiljan, Yugoslavia.
+  9  - Response: Nikola Tesla was born in Smiljan, Lika, which is in the border country of Austro-Hungary.
+ 6   - Response: Nikola Tesla was born in Smiljan, Yugoslavia.
+  7  - Response: Nikola Tesla was born in Smiljan, which is now modern-day Croatia.
+  6  - Response: Nikola Tesla was born in Smiljan, Yugoslavia.
+  1  - Response: Nikola Tesla was born in Yugoslavia.
+    9 - Response: Nikola Tesla was born in Smiljan, Lika, which was a border country of Austro-Hungary.
+   1 - Response: Nikola Tesla was born in Yugoslavia.
+ 7   - Response: Nikola Tesla was born in Smiljan, which is now modern-day Croatia.
+  2  - Response: Nikola Tesla was born in Smiljan, Lika, which was part of Austria-Hungary at the time.
+
+Objašnjenje: Nijedan odgovor nije tačan pa je najviša ocena 9 ali to nije krivica AI jer verovatno ne postoji kontekst. Tačan odgovor je da Tesla rodjen u Smiljanu u Lici koja je u vreme njegovog rodjenja bila pogranična oblast Austrijskog carstva a od 1873 deo Austro ugarskog carstva, od 1919. deo Jugoslavije i od 1993 deo Hrvatske. 
