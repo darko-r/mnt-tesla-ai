@@ -1,7 +1,8 @@
 import streamlit as st
 import time
 from openai import OpenAI
-from helper import all_assistants, json_entry_list, classifier_prompt, condition_parse_prompt, classify, parse_condition
+from helper import all_assistants, classifier_prompt, \
+    classify, TeslaToolGetDocuments, agent_exec
 import re
 import sys
 import json
@@ -15,14 +16,9 @@ def load_assistants():
     return all_assistants()
 
 @st.cache_data
-def load_json_entry_list(path):
-    return json_entry_list(path)
-
-@st.cache_data
 def load_asst_summary(path):
     return json.load(open(path))
 
-json_entry_list_ = load_json_entry_list('metadata.json')
 asst_summary = load_asst_summary('assistant_summary.json')
 
 # Initialize chat history
@@ -49,20 +45,20 @@ if prompt:
     # class_ = "search"
     print(f"Classified: {prompt} as class: {class_}")
     if class_.lower() == "logic":
-        conditions = parse_condition(prompt)
-        print(f"Parsed prompt: {prompt} as condition: {conditions}")
-        if "count" in conditions.lower():
-            cnt = json_entry_list_.count(conditions[6:-1])
-            response = "Count output not available :("
-        else:
-            return_list = json_entry_list_.fetch(conditions)
-            response = f"Of course, here is a list of found documents that match your description: \n{', '.join(map(str, return_list)) }" if return_list else "Sorry, no documents match your description."
+        result = agent_exec.invoke({"input": prompt})
+        # if "count" in conditions.lower():
+        #     response = "Count output not available :("
+        # else:
+        #     return_list = agent_executor.invoke({"input": prompt})
+        #     response = f"Of course, here is a list of found documents that match your description: \n{', '.join(map(str, return_list)) }" if return_list else "Sorry, no documents match your description."
+        response = f"Of course, here is a list of found documents that match your description: \n{', '.join(map(str, [r['title'] for r in result['output']])) }" \
+            if result['output'] else "Sorry, no documents match your description."
     elif class_.lower() == "summarize":
         title = prompt.lower().split('"')[1::2][0]
         print(f"looking for {title} summary")
-        ret = [d for d in json_entry_list_.list_ if d.dict_['title'].lower() == title]
+        ret = [d for d in agent_exec.tools[0].data if d['title'].lower() == title]
         if ret:
-            ret = ret[0].dict_["assistant_OAI_id"]
+            ret = ret[0]["assistant_OAI_id"]
             summary = [a_s for a_s in asst_summary if a_s['assistant_id'] == ret]
             response = summary[0]['summary']
         else:
