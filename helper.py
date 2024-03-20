@@ -13,6 +13,7 @@ from langchain.agents import AgentExecutor, create_react_agent
 import json
 from enum import Enum
 from prompts import classifier_prompt, count_prompt
+import sqlite3
 
 """
 TODO
@@ -108,7 +109,7 @@ results_list = []
 class TeslaToolGetDocuments(BaseTool):
     name = "tesla_tool_get_documents"
     description = """
-    Can be used to list all relevant Nikola Tesla document entries from a dictionary in memory based on a condition.
+    Can be used to list all relevant Nikola Tesla document entries from a SQLite database based on a condition.
     All entries are about documents written by Nikola Tesla, so don't consider him a source, sources are only considered for article publishers.
     Fields that are available for search are title(str), date(str), source(str), type(str, possible values lecture, article, patent), register_num(str)
     Operations that are available for search are "or, and, ==, <=, >=, <, >, !="
@@ -118,14 +119,23 @@ class TeslaToolGetDocuments(BaseTool):
     """
     return_direct: bool = True
 
-    data: List
-    
+    filename: str
+
+    def __init__(self, filename: str):
+        self.filename = filename
+
+    def __init__(self, filename: str):
+        self.filename = filename
+        self.conn = sqlite3.connect(self.filename)
+        self.cursor = self.conn.cursor()
+
     def _run(self, tool_input: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> str:
         """Use the tool."""
         parsed_condition = format_string(tool_input)
         print(parsed_condition)
-        results_list = [e for e in self.data if eval(parsed_condition)]
+        self.cursor.execute(f"SELECT * FROM documents WHERE {parsed_condition}")
+        results_list = self.cursor.fetchall()
         return results_list
 
     async def _arun(
@@ -134,7 +144,7 @@ class TeslaToolGetDocuments(BaseTool):
         """Use the tool asynchronously."""
         self._run(tool_input)
 
-custom_tool = TeslaToolGetDocuments(data=json.load(open(('metadata.json'))))
+custom_tool = TeslaToolGetDocuments(filename='your_database.db')
 llm = ChatOpenAI(model=gpt_4)
 tools = [custom_tool]
 prompt = hub.pull("hwchase17/react")
