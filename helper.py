@@ -84,11 +84,6 @@ def get_response(prompt: str) -> str:
             return "Sorry, no documents match your description."
         else:
             return f"Of course, here is a list of found documents that match your description: \n{', '.join(map(str, [r['title'] for r in result])) }"
-    elif prompt_class == PromptClass.SUMMARIZE:
-        title = prompt.lower().split('"')[1::2][0]
-        print(f"looking for {title} summary")
-        ret = [d for d in agent_exec.tools[0].data if d['title'].lower() == title]
-        return [a_s for a_s in asst_summary if a_s['assistant_id'] == ret[0]["assistant_OAI_id"]][0]['summary'] if ret else "Was not able to find the file specified."
     else:
         file_assistants = all_assistants()
         for assistant in (a.id for a in file_assistants):
