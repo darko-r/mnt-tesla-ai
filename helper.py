@@ -102,9 +102,9 @@ agent_with_chat_history = RunnableWithMessageHistory(
 )
 
 def get_response(prompt: str) -> str:
-    # prompt_class = classify(prompt)
+    #   prompt_class = classify(prompt)
     # print(f"Classified prompt {prompt} as {prompt_class.value}")
-    return sql_agent.invoke({"input": sql_prompt.format(prompt)}, config={"configurable": {"session_id": "<foo>"}})['output']
+    return agent_with_chat_history.invoke({"input": sql_prompt.format(prompt)}, config={"configurable": {"session_id": "<foo>"}})['output']
     if prompt_class == PromptClass.LOGIC:
         return sql_agent.invoke({"input": sql_prompt.format(prompt)}, config={"configurable": {"session_id": "<foo>"}})['output']
     else:
