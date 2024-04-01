@@ -14,13 +14,13 @@ TODO
     done - integrate classifier
     done - write get_file_name
     
-    - search branch
     - parse and print citation
-    - history?
+    - history
     - adding additional tools
-        - search documents
-    - general data answering
-
+    - supervisor agent
+    - normal chat
+    
+    not_needed - search branch
     not_needed - asst_summary -> id_summary
     not_needed - try/catch around response generation
     not_needed - chrono sort output
