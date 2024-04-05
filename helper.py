@@ -29,6 +29,7 @@ TODO
     - parse and print citation
     - history
     - RAG agent
+    - Patent location
     
     not_needed - adding additional tools
     not_needed - search branch
@@ -91,6 +92,9 @@ simple_llm_chain = LLMChain(
     prompt=prompt_template,
     output_parser=output_parser
 )
+
+
+# RAG agent
 
 
 # supervisor agent
