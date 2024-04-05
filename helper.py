@@ -29,7 +29,9 @@ TODO
     - parse and print citation
     - history
     - RAG agent
-    - Patent location
+    - patent location
+    - search files by text query and list
+        - patent location
     
     not_needed - adding additional tools
     not_needed - search branch
