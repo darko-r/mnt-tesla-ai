@@ -56,7 +56,7 @@ os.environ["LANGCHAIN_PROJECT"] = "Multi-agent Collaboration app"
 
 
 # sql agent
-db = SQLDatabase.from_uri("sqlite:///metadata_new.db")
+db = SQLDatabase.from_uri("sqlite:///metadata.db")
 prompt_template = ChatPromptTemplate.from_messages([
     ("system", sql_prompt),
     MessagesPlaceholder(variable_name="messages"),
