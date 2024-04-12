@@ -25,11 +25,11 @@ TODO
     done - write get_file_name
     done - supervisor agent
     done - normal chat
+    done - patent location
     
     - parse and print citation
     - history
     - RAG agent
-    - patent location
     - search files by text query and list
         - patent location
     
