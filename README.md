@@ -29,7 +29,6 @@ streamlit app.py
 
 ## TODO
 
-* OpenAI assistant RAG implementation integration
 * RAG from scratch implementation
 * Agent history of communication
 * single agent @tool approach
