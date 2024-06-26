@@ -30,8 +30,8 @@ TODO
     - parse and print citation
     - history
     - RAG agent
-    - search files by text query and list
-        - patent location
+    - hybrid search
+    - OpenAI finetune
     
     not_needed - adding additional tools
     not_needed - search branch
