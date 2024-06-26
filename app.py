@@ -18,7 +18,7 @@ if prompt:
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    response = get_response(prompt)
+    response = get_response(prompt, 0)
     st.session_state.messages.append({"role": "assistant", "content": response})
     with st.chat_message("assistant"):
         st.markdown(response)

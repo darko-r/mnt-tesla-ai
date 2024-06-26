@@ -1,6 +1,7 @@
-import operator
 import functools
-from typing import Annotated, Sequence, TypedDict
+from typing import TypedDict
+from typing import List, Dict
+from collections import defaultdict
 
 from prompts import sql_prompt, llm_prompt, base_supervisor_system_prompt, \
     supervisor_system_prompt
@@ -8,7 +9,7 @@ from prompts import sql_prompt, llm_prompt, base_supervisor_system_prompt, \
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import BaseOutputParser
-from langchain_core.messages import BaseMessage, HumanMessage
+from langchain_core.messages import HumanMessage
 from langchain_community.utilities.sql_database import SQLDatabase
 from langchain_community.agent_toolkits.sql.toolkit import SQLDatabaseToolkit
 from langchain.agents.agent import AgentExecutor, RunnableMultiActionAgent
@@ -62,7 +63,7 @@ prompt_template = ChatPromptTemplate.from_messages([
     MessagesPlaceholder(variable_name="messages"),
     MessagesPlaceholder(variable_name="agent_scratchpad"),
 ])
-tools = tools = SQLDatabaseToolkit(llm=llm, db=db).get_tools()
+tools = SQLDatabaseToolkit(llm=llm, db=db).get_tools()
 agent = RunnableMultiActionAgent(
     runnable=create_openai_tools_agent(llm, tools, prompt_template),
     input_keys_arg=["messages"],
@@ -131,18 +132,31 @@ supervisor_chain = (
 )
 
 # graph definition
-class AgentState(TypedDict):
-    messages: Annotated[Sequence[BaseMessage], operator.add]
+class ConversationState(TypedDict):
+    messages: List[HumanMessage]
     next: str
-def agent_node(state, agent, name):
+    session_id: str
+
+conversation_history = defaultdict(list)
+
+def agent_node_with_memory(state, agent, name):
     result = agent.invoke(state)
     print(name, result)
     if 'text' in result:
-        return {"messages": [HumanMessage(content=result['text']["output"], name=name)]}
-    return {"messages": [HumanMessage(content=result["output"], name=name)]}
-sql_node = functools.partial(agent_node, agent=sql_agent_executor, name="SQL")
-chat_node = functools.partial(agent_node, agent=simple_llm_chain, name="CHAT")
-workflow = StateGraph(AgentState)
+        new_message = HumanMessage(content=result['text']["output"], name=name)
+    else:
+        new_message = HumanMessage(content=result["output"], name=name)
+    
+    session_id = state.get("session_id")
+    print(f"session_id: {session_id}")
+    if session_id is not None:
+        conversation_history[session_id].append(new_message)
+    
+    return {"messages": conversation_history[session_id]}
+
+sql_node = functools.partial(agent_node_with_memory, agent=sql_agent_executor, name="SQL")
+chat_node = functools.partial(agent_node_with_memory, agent=simple_llm_chain, name="CHAT")
+workflow = StateGraph(ConversationState)
 workflow.add_node("SQL", sql_node)
 workflow.add_node("CHAT", chat_node)
 workflow.add_node("supervisor", supervisor_chain)
@@ -155,7 +169,15 @@ workflow.set_entry_point("supervisor")
 graph = workflow.compile()
 
 # function to get response
-def get_response(prompt: str) -> str:
-    o = graph.invoke({"messages": [HumanMessage(content=prompt)]})
+def get_response(prompt: str, session_id: str) -> str:
+
+    conversation_history[session_id].append(HumanMessage(content=prompt))
+
+    state = {
+        "messages": conversation_history[session_id],
+        "next": "",  # Assuming some value for the next state
+        "session_id": session_id
+    }
+
+    o = graph.invoke(state)
     return o['messages'][-1].content
-    # return agent_with_chat_history.invoke({"input": sql_prompt.format(prompt)}, config={"configurable": {"session_id": "<foo>"}})['output']
