@@ -10,6 +10,7 @@ from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.tools.retriever import create_retriever_tool
 from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import BaseOutputParser
@@ -100,14 +101,31 @@ simple_llm_chain = LLMChain(
 
 
 # RAG agent
+# prompt = ChatPromptTemplate.from_messages([
+#     ("system", rag_system_prompt),
+#     MessagesPlaceholder(variable_name="messages"),
+# ])
+# vectorstore = Chroma(persist_directory='notebooks/db', embedding_function=OpenAIEmbeddings())
+# retriever = vectorstore.as_retriever()
+# question_answer_chain = create_stuff_documents_chain(llm, prompt)
+# rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+
+vectorstore = Chroma(persist_directory='notebooks/db', embedding_function=OpenAIEmbeddings())
+retriever = vectorstore.as_retriever()
+tool = create_retriever_tool(
+    retriever,
+    "retrieve_docs",
+    "Search and return information about Nikola Tesla works.",
+)
+tools = [tool]
 prompt = ChatPromptTemplate.from_messages([
     ("system", rag_system_prompt),
     MessagesPlaceholder(variable_name="messages"),
+    MessagesPlaceholder(variable_name="agent_scratchpad"),
+    # MessagesPlaceholder(variable_name="context"),
 ])
-vectorstore = Chroma(persist_directory='notebooks/db', embedding_function=OpenAIEmbeddings())
-retriever = vectorstore.as_retriever()
-question_answer_chain = create_stuff_documents_chain(llm, prompt)
-rag_chain = create_retrieval_chain(retriever, question_answer_chain)
+agent = create_openai_tools_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools)
 
 
 # supervisor agent
@@ -146,10 +164,12 @@ class ConversationState(TypedDict):
     messages: List[HumanMessage]
     next: str
     session_id: str
+    context: str
 
 conversation_history = defaultdict(list)
 
 def agent_node_with_memory(state, agent, name):
+    print(name)
     result = agent.invoke(state)
     # print(name, result)
     print(name)
@@ -166,7 +186,7 @@ def agent_node_with_memory(state, agent, name):
 
 sql_node = functools.partial(agent_node_with_memory, agent=sql_agent_executor, name="SQL")
 chat_node = functools.partial(agent_node_with_memory, agent=simple_llm_chain, name="CHAT")
-rag_node = functools.partial(agent_node_with_memory, agent=rag_chain, name="RAG")
+rag_node = functools.partial(agent_node_with_memory, agent=agent_executor, name="RAG")
 workflow = StateGraph(ConversationState)
 workflow.add_node("SQL", sql_node)
 workflow.add_node("CHAT", chat_node)
@@ -188,7 +208,8 @@ def get_response(prompt: str, session_id: str) -> str:
     state = {
         "messages": conversation_history[session_id],
         "next": "",  # Assuming some value for the next state
-        "session_id": session_id
+        "session_id": session_id,
+        "context": ""
     }
 
     o = graph.invoke(state)
