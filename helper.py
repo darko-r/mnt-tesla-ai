@@ -1,12 +1,16 @@
 import functools
 from typing import TypedDict
-from typing import List, Dict
+from typing import List
 from collections import defaultdict
 
 from prompts import sql_prompt, llm_prompt, base_supervisor_system_prompt, \
-    supervisor_system_prompt
+    supervisor_system_prompt, rag_system_prompt
 
 from langchain_openai import ChatOpenAI
+from langchain_openai import OpenAIEmbeddings
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_core.messages import HumanMessage
@@ -45,12 +49,10 @@ TODO
 
 from langchain_openai import ChatOpenAI
 import os
-gpt_3_5 = "gpt-3.5-turbo"
-gpt_4 = "gpt-4-turbo-preview"
 
-llm3 = ChatOpenAI(model=gpt_3_5, temperature=0)
-llm4 = ChatOpenAI(model=gpt_4, temperature=0)
-llm = ChatOpenAI(model=gpt_3_5, temperature=0)
+gpt_4 = "gpt-4o"
+
+llm = ChatOpenAI(model=gpt_4, temperature=0)
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
 os.environ["LANGCHAIN_PROJECT"] = "Multi-agent Collaboration app"
@@ -81,7 +83,7 @@ sql_agent_executor = AgentExecutor(
 )
 
 
-# llm "agent"
+# llm agent
 class CustomOutputParser(BaseOutputParser):
     def parse(self, output):
         return {'output': output}
@@ -91,17 +93,25 @@ prompt_template = ChatPromptTemplate.from_messages([
     MessagesPlaceholder(variable_name="messages"),
 ])
 simple_llm_chain = LLMChain(
-    llm=llm3,
+    llm=llm,
     prompt=prompt_template,
     output_parser=output_parser
 )
 
 
 # RAG agent
+prompt = ChatPromptTemplate.from_messages([
+    ("system", rag_system_prompt),
+    MessagesPlaceholder(variable_name="messages"),
+])
+vectorstore = Chroma(persist_directory='notebooks/db', embedding_function=OpenAIEmbeddings())
+retriever = vectorstore.as_retriever()
+question_answer_chain = create_stuff_documents_chain(llm, prompt)
+rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
 
 # supervisor agent
-members = ["SQL", "CHAT"]
+members = ["SQL", "CHAT", "RAG"]
 options = ["FINISH"] + members
 function_def = {
     "name": "route",
@@ -127,7 +137,7 @@ prompt = ChatPromptTemplate.from_messages([
 ]).partial(options=str(options), members=", ".join(members))
 supervisor_chain = (
     prompt
-    | llm4.bind_functions(functions=[function_def], function_call="route")
+    | llm.bind_functions(functions=[function_def], function_call="route")
     | JsonOutputFunctionsParser()
 )
 
@@ -141,14 +151,14 @@ conversation_history = defaultdict(list)
 
 def agent_node_with_memory(state, agent, name):
     result = agent.invoke(state)
-    print(name, result)
+    # print(name, result)
+    print(name)
     if 'text' in result:
         new_message = HumanMessage(content=result['text']["output"], name=name)
     else:
         new_message = HumanMessage(content=result["output"], name=name)
     
     session_id = state.get("session_id")
-    print(f"session_id: {session_id}")
     if session_id is not None:
         conversation_history[session_id].append(new_message)
     
@@ -156,9 +166,11 @@ def agent_node_with_memory(state, agent, name):
 
 sql_node = functools.partial(agent_node_with_memory, agent=sql_agent_executor, name="SQL")
 chat_node = functools.partial(agent_node_with_memory, agent=simple_llm_chain, name="CHAT")
+rag_node = functools.partial(agent_node_with_memory, agent=rag_chain, name="RAG")
 workflow = StateGraph(ConversationState)
 workflow.add_node("SQL", sql_node)
 workflow.add_node("CHAT", chat_node)
+workflow.add_node("RAG", rag_node)
 workflow.add_node("supervisor", supervisor_chain)
 for member in members:
     workflow.add_edge(member, "supervisor")

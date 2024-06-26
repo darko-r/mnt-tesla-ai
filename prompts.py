@@ -23,5 +23,16 @@ respond with FINISH.
 """
 
 supervisor_system_prompt = """Given the conversation above, who should act next?
-SQL should be selected if the question is about metadata of Nikola Tesla's works, CHAT should be selected if the question does not need any data. Otherwise, or if there is a loop in the conversation, feel free to select FINISH.
-Or should we FINISH? Select one of: {options}"""
+SQL should be selected if the question is about metadata of Nikola Tesla's works, CHAT should be selected if the question does not need any data, RAG should be selected if a question warants a document query. Otherwise, or if there is a loop in the conversation, feel free to select FINISH.
+Or should we FINISH? Select one of: {options}
+"""
+
+
+rag_system_prompt = """You are an RAG assistant for question-answering tasks. 
+Use the following pieces of retrieved context to answer 
+the question. If you don't know the answer, say that you 
+don't know. Use three sentences maximum and keep the 
+answer concise.
+
+{context}
+"""
