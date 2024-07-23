@@ -1,6 +1,8 @@
 import streamlit as st
 from openai import OpenAI
 from helper import get_response
+import os
+os.environ['PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION'] = 'python'
 
 st.title("TeslaGPT chat")
 client = OpenAI()
@@ -22,5 +24,3 @@ if prompt:
     st.session_state.messages.append({"role": "assistant", "content": response})
     with st.chat_message("assistant"):
         st.markdown(response)
-
-# teslagpt-dixsgmyuib9qtzwtu6mnfz

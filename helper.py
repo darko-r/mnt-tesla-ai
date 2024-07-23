@@ -55,10 +55,6 @@ gpt_4 = "gpt-4o"
 
 llm = ChatOpenAI(model=gpt_4, temperature=0)
 
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "Multi-agent Collaboration app"
-
-
 # sql agent
 db = SQLDatabase.from_uri("sqlite:///metadata.db")
 prompt_template = ChatPromptTemplate.from_messages([

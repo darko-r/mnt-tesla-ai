@@ -26,9 +26,3 @@ Run the app with:
 ```
 streamlit app.py
 ```
-
-## TODO
-
-* RAG from scratch implementation
-* Agent history of communication
-* single agent @tool approach
